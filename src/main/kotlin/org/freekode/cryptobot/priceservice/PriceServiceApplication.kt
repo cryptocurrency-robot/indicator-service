@@ -3,7 +3,10 @@ package org.freekode.cryptobot.priceservice
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.apache.activemq.ActiveMQConnectionFactory
-import org.freekode.cryptobot.priceservice.domain.PriceValueEvent
+import org.freekode.cryptobot.priceservice.domain.alert.AlertTriggeredEvent
+import org.freekode.cryptobot.priceservice.domain.price.PlatformPriceEvent
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer
@@ -19,6 +22,8 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter
 import org.springframework.jms.support.converter.MessageType
 import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import javax.jms.ConnectionFactory
 
 
@@ -30,8 +35,10 @@ import javax.jms.ConnectionFactory
     PropertySource(value = ["file:\${user.home}/price-service.properties"], ignoreResourceNotFound = true)
 )
 class PriceServiceApplication(
-    @Value("\${broker-url}") private val brokerUrl: String
+    @Value("\${event.broker-url}") private val brokerUrl: String
 ) {
+
+    private val log: Logger = LoggerFactory.getLogger(PriceServiceApplication::class.java)
 
     @Bean
     fun jmsTemplate(
@@ -58,6 +65,8 @@ class PriceServiceApplication(
 
     @Bean
     fun connectionFactory(): ConnectionFactory {
+        log.info("ActiveMQ Broker URL $brokerUrl")
+
         val factory = ActiveMQConnectionFactory()
         factory.brokerURL = brokerUrl
         return factory
@@ -74,9 +83,19 @@ class PriceServiceApplication(
         return converter
     }
 
+    @Bean
+    fun corsConfigurer(): WebMvcConfigurer {
+        return object : WebMvcConfigurer {
+            override fun addCorsMappings(registry: CorsRegistry) {
+                registry.addMapping("/**")
+            }
+        }
+    }
+
     private fun getMessageConverterTypeMappings(): Map<String?, Class<*>> {
         return mapOf(
-            PriceValueEvent::class.simpleName to PriceValueEvent::class.java
+            PlatformPriceEvent::class.simpleName to PlatformPriceEvent::class.java,
+            AlertTriggeredEvent::class.simpleName to AlertTriggeredEvent::class.java
         )
     }
 }
