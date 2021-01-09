@@ -9,14 +9,14 @@
 		<version>2.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>org.freekode.cryptobot</groupId>
-	<artifactId>price-service</artifactId>
+	<groupId>org.freekode.cryptocurrency-robot</groupId>
+	<artifactId>indicator-service</artifactId>
 	<version>0.0.1</version>
-	<name>Price - Service</name>
+	<name>Indicator - Service</name>
 
 	<properties>
 		<java.version>11</java.version>
-		<kotlin.version>1.4.20</kotlin.version>
+		<kotlin.version>1.4.21</kotlin.version>
 	</properties>
 
 	<dependencies>
