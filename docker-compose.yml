@@ -1,14 +1,14 @@
 version: '3'
 services:
   activemq:
-    container_name: 'crypto-bot-activemq'
+    container_name: 'activemq'
     image: freekode/activemq
     ports:
       - '61616:61616'
       - '8161:8161'
   platform-binance:
     container_name: 'platform-binance'
-    image: freekode/platform-binance
+    image: docker.pkg.github.com/cryptocurrency-robot/platform-binance/platform-binance:latest
     depends_on:
       - activemq
     ports:
