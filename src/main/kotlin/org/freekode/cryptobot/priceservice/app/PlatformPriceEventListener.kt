@@ -36,7 +36,7 @@ class PlatformPriceEventListener(
         rateLimitedOnPlatformPrice = RateLimiter.decorateConsumer(rateLimiter) { rateLimited(it) }
     }
 
-    @JmsListener(destination = "\${event.platformPriceTopic}")
+    @JmsListener(destination = "\${event.topic.platformPrice}")
     fun onPlatformPrice(platformPriceEvent: PlatformPriceEvent) {
         rateLimitedOnPlatformPrice.accept(platformPriceEvent)
     }
