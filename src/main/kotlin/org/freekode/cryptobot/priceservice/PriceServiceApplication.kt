@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.apache.activemq.ActiveMQConnectionFactory
 import org.freekode.cryptobot.priceservice.domain.alert.AlertTriggeredEvent
-import org.freekode.cryptobot.priceservice.domain.price.PlatformPriceEvent
+import org.freekode.cryptobot.priceservice.domain.price.PlatformValueEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -32,7 +32,7 @@ import javax.jms.ConnectionFactory
 @EnableScheduling
 @PropertySources(
     PropertySource("classpath:application.properties"),
-    PropertySource(value = ["file:\${user.home}/price-service.properties"], ignoreResourceNotFound = true)
+    PropertySource(value = ["file:\${user.home}/indicator-service.properties"], ignoreResourceNotFound = true)
 )
 class PriceServiceApplication(
     @Value("\${event.broker-url}") private val brokerUrl: String
@@ -94,7 +94,7 @@ class PriceServiceApplication(
 
     private fun getMessageConverterTypeMappings(): Map<String?, Class<*>> {
         return mapOf(
-            PlatformPriceEvent::class.simpleName to PlatformPriceEvent::class.java,
+            PlatformValueEvent::class.simpleName to PlatformValueEvent::class.java,
             AlertTriggeredEvent::class.simpleName to AlertTriggeredEvent::class.java
         )
     }

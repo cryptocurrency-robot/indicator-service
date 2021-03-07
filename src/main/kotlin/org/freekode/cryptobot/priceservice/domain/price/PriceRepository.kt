@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 
 interface PriceRepository {
-    fun addPrice(platformPriceEvent: PlatformPriceEvent)
+    fun addPrice(platformValueEvent: PlatformValueEvent)
 
-    fun getPrices(startDate: LocalDateTime, endDate: LocalDateTime): List<PlatformPriceEvent>
+    fun getPrices(startDate: LocalDateTime, endDate: LocalDateTime): List<PlatformValueEvent>
 }
