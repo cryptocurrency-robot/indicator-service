@@ -1,0 +1,9 @@
+server:
+  port: 8081
+
+event:
+  broker-url: 'tcp://localhost:61616'
+  topic:
+    platform: 'platform-update'
+    indicator: 'indicator-update'
+    alert-triggered: 'alert-triggered'
